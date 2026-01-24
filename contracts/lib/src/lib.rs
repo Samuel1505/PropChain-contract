@@ -1,8 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(unexpected_cfgs)]
 
-#[cfg(not(feature = "std"))]
-use scale_info::prelude::vec::Vec;
+use ink::prelude::vec::Vec;
 use ink::storage::Mapping;
 use propchain_traits::*;
 
@@ -17,9 +16,8 @@ mod propchain_contracts {
         PropertyNotFound,
         Unauthorized,
         InvalidMetadata,
-        EscrowNotFound,
-        EscrowAlreadyReleased,
-        InsufficientFunds,
+        NotCompliant, // Recipient is not compliant
+        ComplianceCheckFailed, // Compliance registry call failed
     }
 
     /// Property Registry contract
@@ -210,6 +208,7 @@ mod propchain_contracts {
         /// Creates a new PropertyRegistry contract
         #[ink(constructor)]
         pub fn new() -> Self {
+            let caller = Self::env().caller();
             Self {
                 properties: Mapping::default(),
                 owner_properties: Mapping::default(),
@@ -237,9 +236,14 @@ mod propchain_contracts {
         }
 
         /// Registers a new property
+        /// Optionally checks compliance if compliance registry is set
         #[ink(message)]
         pub fn register_property(&mut self, metadata: PropertyMetadata) -> Result<u64, Error> {
             let caller = self.env().caller();
+            
+            // Check compliance for property registration (optional but recommended)
+            self.check_compliance(caller)?;
+            
             self.property_count += 1;
             let property_id = self.property_count;
 
@@ -271,6 +275,7 @@ mod propchain_contracts {
         }
 
         /// Transfers property ownership
+        /// Requires recipient to be compliant if compliance registry is set
         #[ink(message)]
         pub fn transfer_property(&mut self, property_id: u64, to: AccountId) -> Result<(), Error> {
             let caller = self.env().caller();
