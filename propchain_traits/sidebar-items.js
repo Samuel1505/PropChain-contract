@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ApprovalType"],"struct":["PropertyInfo","PropertyMetadata"],"trait":["AdvancedEscrow","Escrow","PropertyRegistry"]};
