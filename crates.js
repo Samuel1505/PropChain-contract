@@ -1,2 +1,2 @@
-window.ALL_CRATES = ["propchain_contracts","propchain_escrow","propchain_proxy","propchain_traits","security_audit"];
-//{"start":21,"fragment_lengths":[21,19,18,19,17]}
+window.ALL_CRATES = ["compliance_registry","fractional","ipfs_metadata","oracle","propchain_analytics","propchain_bridge","propchain_contracts","propchain_escrow","propchain_fees","propchain_insurance","propchain_proxy","propchain_traits","property_token","security_audit"];
+//{"start":21,"fragment_lengths":[21,13,16,9,22,19,22,19,17,22,18,19,17,17]}
